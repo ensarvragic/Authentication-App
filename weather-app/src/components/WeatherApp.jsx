@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import './WeatherApp.css'
 
-
 import clear_icon from '../assets/clear.png';
 import cloud_icon from '../assets/cloud.png';
 import drizzle_icon from '../assets/drizzle.png';
@@ -9,18 +8,20 @@ import humidity_icon from '../assets/humidity.png';
 import rain_icon from '../assets/rain.png';
 import search_icon from '../assets/search.png';
 import snow_icon from '../assets/snow.png';
-import wind_icon from '../assets/wind.png'
-
+import wind_icon from '../assets/wind.png';
 
 const WeatherApp = () => {
+    const api_key = `dd94f859a0e52d6e4767fddf735f04a7`;
 
-    let api_key = `dd94f859a0e52d6e4767fddf735f04a7`;
-
-    const[wicon, setWicon] = useState(cloud_icon);
+    const [wicon, setWicon] = useState(cloud_icon);
+    const [humidity, setHumidity] = useState('64%');
+    const [windSpeed, setWindSpeed] = useState('18 km/h');
+    const [temperature, setTemperature] = useState('24°c');
+    const [location, setLocation] = useState('London');
 
     const search = async () => {
         const element = document.getElementsByClassName("cityInput")
-        if(element[0].value === ''){
+        if (element[0].value === '') {
             return 0;
         }
         let url = `https://api.openweathermap.org/data/2.5/weather?q=${element[0].value}&units=Metric&appid=${api_key}`
@@ -28,15 +29,10 @@ const WeatherApp = () => {
         let response = await fetch(url);
         let data = await response.json();
 
-        const humidity = document.getElementsByClassName('humidity-percent')
-        const wind = document.getElementsByClassName('wind-rate')
-        const temperature = document.getElementsByClassName('weather-temp')
-        const location = document.getElementsByClassName('weather-location')
-
-        humidity[0].innerHTML = data.main.humidity+'%';
-        wind[0].innerHTML = Math.floor(data.wind.speed)+'km/h';
-        temperature[0].innerHTML = Math.floor(data.main.temp)+'°c';
-        location[0].innerHTML = data.name;
+        setHumidity(data.main.humidity + '%');
+        setWindSpeed(Math.floor(data.wind.speed) + ' km/h');
+        setTemperature(Math.floor(data.main.temp) + '°c');
+        setLocation(data.name);
 
         switch (data.weather[0].icon) {
             case '01d':
@@ -72,38 +68,37 @@ const WeatherApp = () => {
         }
     }
 
-  return (
-    <div className='container'>
-        <div className='top-bar'>
-            <input type='text' className='cityInput' placeholder='search'/>
-            <div className='serach-icon'onClick={() => {search()}}>
-                <img src={search_icon}/>
-            </div>
-        </div>
-        <div className='weather-image'>
-            <img src={cloud_icon}/>
-        </div>
-        <div className="weather-temp">24°c</div>
-        <div className="weather-location">London</div>
-        <div className="data-container">
-            <div className="element">
-                <img src={humidity_icon} className='icon'/>
-                <div className="data">
-                    <div className="humidity-percent">64%</div>
-                    <div className="text">Humidity</div>
+    return (
+        <div className='container'>
+            <div className='top-bar'>
+                <input type='text' className='cityInput' placeholder='search' />
+                <div className='serach-icon' onClick={() => { search() }}>
+                    <img src={search_icon} alt="Search" />
                 </div>
             </div>
-            <div className="element">
-                <img src={wind_icon} className='icon'/>
-                <div className="data">
-                    <div className="wind-rate">18 km/h</div>
-                    <div className="text">Wind Speed</div>
+            <div className='weather-image'>
+                <img src={wicon} alt="Weather Icon" />
+            </div>
+            <div className="weather-temp">{temperature}</div>
+            <div className="weather-location">{location}</div>
+            <div className="data-container">
+                <div className="element">
+                    <img src={humidity_icon} className='icon' alt="Humidity Icon" />
+                    <div className="data">
+                        <div className="humidity-percent">{humidity}</div>
+                        <div className="text">Humidity</div>
+                    </div>
+                </div>
+                <div className="element">
+                    <img src={wind_icon} className='icon' alt="Wind Icon" />
+                    <div className="data">
+                        <div className="wind-rate">{windSpeed}</div>
+                        <div className="text">Wind Speed</div>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-    
-  )
+    )
 }
 
 export default WeatherApp;
