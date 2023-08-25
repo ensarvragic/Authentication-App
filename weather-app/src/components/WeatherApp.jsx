@@ -73,11 +73,11 @@ const WeatherApp = () => {
             <div className='top-bar'>
                 <input type='text' className='cityInput' placeholder='search' />
                 <div className='serach-icon' onClick={() => { search() }}>
-                    <img src={search_icon} alt="Search" />
+                    <img src={search_icon} alt="Search" className='search-icon'/>
                 </div>
             </div>
             <div className='weather-image'>
-                <img src={wicon} alt="Weather Icon" />
+                <img src={wicon} alt="" />
             </div>
             <div className="weather-temp">{temperature}</div>
             <div className="weather-location">{location}</div>
